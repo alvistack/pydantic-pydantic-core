@@ -1,0 +1,5 @@
+python-pydantic-core (100:2.8.0-1) UNRELEASED; urgency=medium
+
+  * https://github.com/pydantic/pydantic-core/releases/tag/v2.8.0
+
+ -- Wong Hoi Sing Edison <hswong3i@pantarei-design.com>  Tue, 19 Sep 2023 11:18:43 +0800
