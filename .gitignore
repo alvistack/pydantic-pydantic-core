@@ -36,3 +36,7 @@ node_modules/
 /foobar.py
 /python/pydantic_core/*.so
 /src/self_schema.py
+
+.cargo/
+vendor/
+.pybuild/
