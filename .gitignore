@@ -37,5 +37,11 @@ node_modules/
 /python/pydantic_core/*.so
 /src/self_schema.py
 
+<<<<<<< HEAD
 # samply
 /profile.json
+=======
+.cargo/
+vendor/
+.pybuild/
+>>>>>>> ed8b1598 (alvistack/v2.15.0)
