@@ -37,3 +37,7 @@ node_modules/
 
 # samply
 /profile.json
+
+.cargo/
+vendor/
+.pybuild/
