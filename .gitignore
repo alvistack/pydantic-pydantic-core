@@ -35,5 +35,11 @@ node_modules/
 /foobar.py
 /python/pydantic_core/*.so
 
+<<<<<<< HEAD
 # samply
 /profile.json
+=======
+.cargo/
+vendor/
+.pybuild/
+>>>>>>> ed8b1598 (alvistack/v2.15.0)
