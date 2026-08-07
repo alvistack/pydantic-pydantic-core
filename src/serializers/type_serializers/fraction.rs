@@ -5,36 +5,37 @@ use pyo3::prelude::*;
 use pyo3::types::PyDict;
 
 use crate::definitions::DefinitionsBuilder;
-use crate::serializers::SerializationState;
 use crate::serializers::infer::{infer_json_key_known, infer_serialize_known, infer_to_python_known};
 use crate::serializers::ob_type::{IsType, ObType};
+
+use crate::serializers::SerializationState;
 
 use super::{BuildSerializer, CombinedSerializer, TypeSerializer, infer_json_key, infer_serialize, infer_to_python};
 
 #[derive(Debug)]
-pub struct DecimalSerializer {}
+pub struct FractionSerializer {}
 
-static DECIMAL_SERIALIZER: LazyLock<Arc<CombinedSerializer>> = LazyLock::new(|| Arc::new(DecimalSerializer {}.into()));
+static FRACTION_SERIALIZER: LazyLock<Arc<CombinedSerializer>> =
+    LazyLock::new(|| Arc::new(FractionSerializer {}.into()));
 
-impl BuildSerializer for DecimalSerializer {
-    const EXPECTED_TYPE: &'static str = "decimal";
+impl BuildSerializer for FractionSerializer {
+    const EXPECTED_TYPE: &'static str = "fraction";
 
     fn build(
         _schema: &Bound<'_, PyDict>,
         _config: Option<&Bound<'_, PyDict>>,
         _definitions: &mut DefinitionsBuilder<Arc<CombinedSerializer>>,
     ) -> PyResult<Arc<CombinedSerializer>> {
-        Ok(DECIMAL_SERIALIZER.clone())
+        Ok(FRACTION_SERIALIZER.clone())
     }
 }
 
-impl_py_gc_traverse!(DecimalSerializer {});
+impl_py_gc_traverse!(FractionSerializer {});
 
-impl TypeSerializer for DecimalSerializer {
+impl TypeSerializer for FractionSerializer {
     fn to_python<'py>(&self, value: &Bound<'py, PyAny>, state: &mut SerializationState<'py>) -> PyResult<Py<PyAny>> {
-        let _py = value.py();
-        match state.extra.ob_type_lookup.is_type(value, ObType::Decimal) {
-            IsType::Exact | IsType::Subclass => infer_to_python_known(ObType::Decimal, value, state),
+        match state.extra.ob_type_lookup.is_type(value, ObType::Fraction) {
+            IsType::Exact | IsType::Subclass => infer_to_python_known(ObType::Fraction, value, state),
             IsType::False => {
                 state.warn_fallback_py(self.get_name(), value)?;
                 infer_to_python(value, state)
@@ -47,8 +48,8 @@ impl TypeSerializer for DecimalSerializer {
         key: &'a Bound<'py, PyAny>,
         state: &mut SerializationState<'py>,
     ) -> PyResult<Cow<'a, str>> {
-        match state.extra.ob_type_lookup.is_type(key, ObType::Decimal) {
-            IsType::Exact | IsType::Subclass => infer_json_key_known(ObType::Decimal, key, state),
+        match state.extra.ob_type_lookup.is_type(key, ObType::Fraction) {
+            IsType::Exact | IsType::Subclass => infer_json_key_known(ObType::Fraction, key, state),
             IsType::False => {
                 state.warn_fallback_py(self.get_name(), key)?;
                 infer_json_key(key, state)
@@ -62,8 +63,8 @@ impl TypeSerializer for DecimalSerializer {
         serializer: S,
         state: &mut SerializationState<'py>,
     ) -> Result<S::Ok, S::Error> {
-        match state.extra.ob_type_lookup.is_type(value, ObType::Decimal) {
-            IsType::Exact | IsType::Subclass => infer_serialize_known(ObType::Decimal, value, serializer, state),
+        match state.extra.ob_type_lookup.is_type(value, ObType::Fraction) {
+            IsType::Exact | IsType::Subclass => infer_serialize_known(ObType::Fraction, value, serializer, state),
             IsType::False => {
                 state.warn_fallback_ser::<S>(self.get_name(), value)?;
                 infer_serialize(value, serializer, state)

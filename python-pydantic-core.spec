@@ -18,7 +18,7 @@
 
 Name: python-pydantic-core
 Epoch: 100
-Version: 2.47.0
+Version: 2.48.0
 Release: 1%{?dist}
 Summary: Core validation logic for pydantic written in rust
 License: MIT

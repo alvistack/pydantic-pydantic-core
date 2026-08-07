@@ -9,6 +9,7 @@ use crate::lookup_key::LookupPath;
 use crate::tools::safe_repr;
 use crate::validators::complex::string_to_complex;
 use crate::validators::decimal::create_decimal;
+use crate::validators::fraction::create_fraction;
 use crate::validators::{TemporalUnitMode, ValBytesMode};
 
 use super::datetime::{
@@ -23,7 +24,7 @@ use super::{
 };
 
 #[derive(Debug, Clone, IntoPyObject, IntoPyObjectRef)]
-pub enum StringMapping<'py> {
+pub(crate) enum StringMapping<'py> {
     String(Bound<'py, PyString>),
     Mapping(Bound<'py, PyDict>),
 }
@@ -157,6 +158,13 @@ impl<'py> Input<'py> for StringMapping<'py> {
         }
     }
 
+    fn validate_fraction(&self, _strict: bool, _py: Python<'py>) -> ValMatch<Bound<'py, PyAny>> {
+        match self {
+            Self::String(s) => create_fraction(s, self).map(ValidationMatch::strict),
+            Self::Mapping(_) => Err(ValError::new(ErrorTypeDefaults::FractionType, self)),
+        }
+    }
+
     type Dict<'a>
         = StringMappingDict<'py>
     where
@@ -265,7 +273,7 @@ impl<'py> BorrowInput<'py> for StringMapping<'py> {
     }
 }
 
-pub struct StringMappingDict<'py>(Bound<'py, PyDict>);
+pub(crate) struct StringMappingDict<'py>(Bound<'py, PyDict>);
 
 impl<'py> Arguments<'py> for StringMappingDict<'py> {
     type Args = Never;
