@@ -1,0 +1,5 @@
+python-pydantic-core source: file-without-copyright-information
+python-pydantic-core source: no-debian-changes
+python-pydantic-core source: source-contains-prebuilt-windows-binary
+python-pydantic-core source: source-is-missing
+python-pydantic-core source: source-package-encodes-python-version
